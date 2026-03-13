@@ -70,14 +70,14 @@ function App() {
                 </p>
               </div>
 
-              <div class="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                <span class="rounded-full border border-border/70 bg-panel/70 px-3 py-1.5">
+              <div class="grid gap-2 text-sm text-muted-foreground sm:flex sm:flex-wrap sm:items-center sm:gap-3">
+                <span class="inline-flex w-fit rounded-full border border-border/70 bg-panel/70 px-3 py-1.5 max-sm:text-xs">
                   Solid + Vite
                 </span>
-                <span class="rounded-full border border-border/70 bg-panel/70 px-3 py-1.5">
+                <span class="inline-flex w-fit rounded-full border border-border/70 bg-panel/70 px-3 py-1.5 max-sm:text-xs">
                   Native emoji rendering
                 </span>
-                <span class="rounded-full border border-border/70 bg-panel/70 px-3 py-1.5">
+                <span class="inline-flex w-fit rounded-full border border-border/70 bg-panel/70 px-3 py-1.5 max-sm:text-xs">
                   Local recents only
                 </span>
               </div>
