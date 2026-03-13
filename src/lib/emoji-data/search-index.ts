@@ -1,19 +1,27 @@
-import { normalizeSearchTerm } from '@/lib/emoji-data/normalization'
+import {
+  getPhraseSearchVariants,
+  getSearchVariants,
+  normalizeSearchTerm,
+} from '@/lib/emoji-data/normalization'
 import { createQueryDescriptor, scoreIndexedEntry, type IndexedEmojiEntry } from '@/lib/emoji-data/ranking'
 import { dedupeStrings } from '@/lib/utils'
 import type { EmojiEntry } from '@/lib/types'
 
 function normalizeTerms(terms: string[]) {
-  return dedupeStrings(terms.map((term) => normalizeSearchTerm(term)))
+  return dedupeStrings(terms.flatMap((term) => getSearchVariants(term)))
+}
+
+function normalizePhraseTerms(terms: string[]) {
+  return dedupeStrings(terms.flatMap((term) => getPhraseSearchVariants(term)))
 }
 
 function indexEmojiEntry(entry: EmojiEntry): IndexedEmojiEntry {
   return {
     entry,
-    nameTerms: normalizeTerms([entry.name]),
-    aliasTerms: normalizeTerms([...entry.shortcodes, ...entry.aliases]),
+    nameTerms: normalizePhraseTerms([entry.name]),
+    aliasTerms: normalizePhraseTerms([...entry.shortcodes, ...entry.aliases]),
     keywordTerms: normalizeTerms(entry.keywords),
-    categoryTerms: normalizeTerms([entry.categoryLabel]),
+    categoryTerms: normalizePhraseTerms([entry.categoryLabel]),
   }
 }
 

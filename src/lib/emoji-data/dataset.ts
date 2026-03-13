@@ -1,4 +1,4 @@
-import emojiData from 'emojibase-data/en/data.json'
+import emojiData from 'emojibase-data/en/compact.json'
 import shortcodeData from 'emojibase-data/en/shortcodes/emojibase.json'
 
 import { buildHeuristicAliases } from '@/lib/emoji-data/alias-heuristics'
@@ -8,14 +8,14 @@ import { dedupeStrings } from '@/lib/utils'
 import type { EmojiEntry, EmojiSkinEntry } from '@/lib/types'
 
 interface RawEmojiSkin {
-  emoji?: string
+  unicode?: string
   hexcode: string
   label: string
   tone?: number | number[]
 }
 
 interface RawEmojiEntry {
-  emoji?: string
+  unicode?: string
   hexcode: string
   label: string
   order?: number
@@ -40,9 +40,9 @@ function mapSkins(maybeSkins: RawEmojiSkin[] | undefined): EmojiSkinEntry[] {
   }
 
   return maybeSkins
-    .filter((skin) => skin.emoji)
+    .filter((skin) => skin.unicode)
     .map((skin) => ({
-      emoji: skin.emoji ?? '',
+      emoji: skin.unicode ?? '',
       hexcode: skin.hexcode,
       name: skin.label,
       maybeTone: skin.tone,
@@ -50,7 +50,7 @@ function mapSkins(maybeSkins: RawEmojiSkin[] | undefined): EmojiSkinEntry[] {
 }
 
 function toEmojiEntry(item: RawEmojiEntry): EmojiEntry | null {
-  if (!item.emoji || item.order === undefined) {
+  if (!item.unicode || item.order === undefined) {
     return null
   }
 
@@ -81,7 +81,7 @@ function toEmojiEntry(item: RawEmojiEntry): EmojiEntry | null {
 
   return {
     id: item.hexcode,
-    emoji: item.emoji,
+    emoji: item.unicode,
     name: item.label,
     categoryId,
     categoryLabel: category.label,

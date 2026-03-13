@@ -25,26 +25,26 @@ interface ScoreWeights {
 }
 
 const nameWeights: ScoreWeights = {
-  exact: 1200,
-  prefix: 980,
-  substring: 760,
-  tokenMatch: 640,
+  exact: 4000,
+  prefix: 2800,
+  substring: 1800,
+  tokenMatch: 1200,
   subsequence: 180,
 }
 
 const aliasWeights: ScoreWeights = {
-  exact: 860,
-  prefix: 720,
-  substring: 560,
-  tokenMatch: 460,
+  exact: 1800,
+  prefix: 1350,
+  substring: 920,
+  tokenMatch: 640,
   subsequence: 130,
 }
 
 const keywordWeights: ScoreWeights = {
-  exact: 540,
-  prefix: 420,
-  substring: 300,
-  tokenMatch: 220,
+  exact: 760,
+  prefix: 520,
+  substring: 320,
+  tokenMatch: 240,
   subsequence: 70,
 }
 

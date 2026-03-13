@@ -1,6 +1,7 @@
 import { dedupeStrings } from '@/lib/utils'
 
 const punctuationPattern = /[’'".,!?/\\:;()[\]{}]+/g
+const punctuationExceptPlusPattern = /[’'".,!?/\\:;()[\]{}]+/g
 const separatorPattern = /[_-]+/g
 const whitespacePattern = /\s+/g
 
@@ -13,6 +14,18 @@ export function normalizeSearchTerm(term: string) {
     .replace(/&/g, ' and ')
     .replace(/\+/g, ' plus ')
     .replace(punctuationPattern, ' ')
+    .replace(whitespacePattern, ' ')
+    .trim()
+}
+
+function preserveSymbolsTerm(term: string) {
+  return term
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(separatorPattern, ' ')
+    .replace(/&/g, ' and ')
+    .replace(punctuationExceptPlusPattern, ' ')
     .replace(whitespacePattern, ' ')
     .trim()
 }
@@ -51,23 +64,43 @@ function toPlural(term: string) {
 
 export function getSearchVariants(term: string) {
   const normalized = normalizeSearchTerm(term)
+  const symbolFriendly = preserveSymbolsTerm(term)
   if (!normalized) {
     return []
   }
 
   const compact = compactSearchTerm(normalized)
   const tokens = normalized.split(' ').filter(Boolean)
+  const singleWordVariants =
+    tokens.length === 1 ? [toSingular(normalized), toPlural(normalized)] : []
   const variants = dedupeStrings([
+    symbolFriendly,
+    symbolFriendly.replace(/\s+/g, ''),
     normalized,
     compact,
     normalized.replace(/\bplus\b/g, '+').trim(),
     tokens.join(' '),
     tokens.join(''),
-    ...tokens.map(toSingular),
-    ...tokens.map(toPlural),
+    ...singleWordVariants,
   ])
 
   return variants
+}
+
+export function getPhraseSearchVariants(term: string) {
+  const normalized = normalizeSearchTerm(term)
+  const symbolFriendly = preserveSymbolsTerm(term)
+  if (!normalized) {
+    return []
+  }
+
+  return dedupeStrings([
+    symbolFriendly,
+    symbolFriendly.replace(/\s+/g, ''),
+    normalized,
+    compactSearchTerm(normalized),
+    normalized.replace(/\bplus\b/g, '+').trim(),
+  ])
 }
 
 export function tokenizeQuery(query: string) {

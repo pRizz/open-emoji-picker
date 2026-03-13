@@ -4,7 +4,7 @@ import type { ThemeMode } from '@/lib/types'
 export const THEME_STORAGE_KEY = 'open-emoji-picker:theme:v1'
 
 export function getSystemTheme() {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
     return 'dark' as const
   }
 
@@ -37,7 +37,7 @@ export function applyThemeMode(mode: ThemeMode) {
 }
 
 export function watchSystemTheme(onChange: () => void) {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
     return () => undefined
   }
 
@@ -48,7 +48,7 @@ export function watchSystemTheme(onChange: () => void) {
 }
 
 export function prefersReducedMotion() {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
     return false
   }
 

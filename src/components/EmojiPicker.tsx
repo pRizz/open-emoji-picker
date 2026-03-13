@@ -156,7 +156,10 @@ export function EmojiPicker(props: EmojiPickerProps) {
     setCopiedEmojiId(entry.id)
     copyResetTimer = window.setTimeout(() => setCopiedEmojiId(undefined), 900)
 
-    const compactMessage = typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches
+    const compactMessage =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(max-width: 640px)').matches
     const successMessage = compactMessage
       ? `Copied ${entry.emoji}`
       : `Copied ${entry.emoji} ${titleCase(entry.name)}`

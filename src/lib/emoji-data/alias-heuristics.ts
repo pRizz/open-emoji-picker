@@ -1,4 +1,4 @@
-import { getSearchVariants, normalizeSearchTerm } from '@/lib/emoji-data/normalization'
+import { normalizeSearchTerm } from '@/lib/emoji-data/normalization'
 import { dedupeStrings } from '@/lib/utils'
 
 interface AliasHeuristicInput {
@@ -6,6 +6,27 @@ interface AliasHeuristicInput {
   shortcodes: string[]
   keywords: string[]
 }
+
+const aliasStopwords = new Set([
+  'and',
+  'with',
+  'face',
+  'hand',
+  'body',
+  'button',
+  'flag',
+  'symbol',
+  'up',
+  'down',
+  'left',
+  'right',
+  'index',
+  'finger',
+  'thumb',
+  'one',
+  'thing',
+  'object',
+])
 
 function expandShortcode(shortcode: string) {
   const normalized = normalizeSearchTerm(shortcode)
@@ -26,18 +47,33 @@ function buildNameAliases(name: string) {
     .replace(/\b(face|button|flag|symbol|with|and)\b/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
+  const isSingleWordName = !normalizedName.includes(' ')
+  const singleWordVariants = isSingleWordName
+    ? dedupeStrings([`${normalizedName}s`, normalizedName.endsWith('s') ? normalizedName.slice(0, -1) : ''])
+    : []
 
   return dedupeStrings([
-    ...getSearchVariants(name),
+    normalizedName.replace(/\s+/g, ''),
     withoutFillers,
     withoutFillers.replace(/\s+/g, ''),
-  ])
+    ...singleWordVariants,
+  ]).filter((alias) => alias && alias !== normalizedName)
+}
+
+function buildKeywordAliases(keywords: string[]) {
+  return dedupeStrings(
+    keywords
+      .map(normalizeSearchTerm)
+      .filter((keyword) => keyword && !aliasStopwords.has(keyword))
+      .filter((keyword) => keyword.length >= 3)
+      .filter((keyword) => keyword.split(' ').length <= 2),
+  )
 }
 
 export function buildHeuristicAliases({ name, shortcodes, keywords }: AliasHeuristicInput) {
   return dedupeStrings([
     ...buildNameAliases(name),
     ...shortcodes.flatMap(expandShortcode),
-    ...keywords.flatMap(getSearchVariants),
+    ...buildKeywordAliases(keywords),
   ]).filter((alias) => alias !== normalizeSearchTerm(name))
 }
