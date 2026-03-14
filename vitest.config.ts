@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 import solid from 'vite-plugin-solid'
 
 export default defineConfig({
@@ -20,5 +20,6 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
     css: true,
+    exclude: [...configDefaults.exclude, 'tests/e2e/**'],
   },
 })
