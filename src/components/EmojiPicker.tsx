@@ -185,7 +185,10 @@ export function EmojiPicker(props: EmojiPickerProps) {
   })
 
   return (
-    <section class="grid h-[min(70svh,52rem)] min-h-[26rem] grid-rows-[auto,1fr,auto] overflow-hidden rounded-[2rem] border border-border/70 bg-panel/90 shadow-2xl shadow-black/20 backdrop-blur-xl sm:h-[min(78svh,52rem)] sm:min-h-[32rem]">
+    <section
+      aria-label="Emoji picker"
+      class="grid h-[min(70svh,52rem)] min-h-[26rem] grid-rows-[auto,1fr,auto] overflow-hidden rounded-[2rem] border border-border/70 bg-panel/90 shadow-2xl shadow-black/20 backdrop-blur-xl sm:h-[min(78svh,52rem)] sm:min-h-[32rem]"
+    >
       <Show when={showSearch()}>
         <div class="border-b border-border/70 bg-panel/95 px-4 py-4 sm:px-5">
           <SearchBar

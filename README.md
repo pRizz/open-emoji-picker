@@ -41,6 +41,7 @@ The picker uses native system emoji rendering, smart alias-aware search, sticky 
 - [`solid-sonner`](https://www.npmjs.com/package/solid-sonner)
 - [`Emojibase`](https://emojibase.dev/)
 - Vitest + `@solidjs/testing-library` + `@testing-library/user-event` + `jsdom`
+- Playwright for desktop/mobile browser coverage
 
 ## Local development
 
@@ -58,11 +59,26 @@ npm run dev
 
 Vite will serve the app locally for development.
 
-### Run tests
+### Run unit tests
 
 ```bash
 npm test
 ```
+
+### Install Playwright browsers
+
+```bash
+npx playwright install chromium
+```
+
+### Run end-to-end responsiveness tests
+
+```bash
+npm run test:e2e
+```
+
+The Playwright suite starts the app automatically and tests the GitHub Pages base path at
+`/open-emoji-picker/`.
 
 ### Run the production build
 
@@ -255,11 +271,13 @@ The test suite includes:
 - clipboard helper tests
 - recents persistence tests
 - a component-level picker interaction test
+- Playwright coverage for desktop and mobile responsiveness in a real browser
 
-Current command:
+Commands:
 
 ```bash
 npm test
+npm run test:e2e
 ```
 
 ## GitHub Pages deployment
