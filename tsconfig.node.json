@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "postcss.config.mjs"]
+  "include": ["vite.config.ts", "vitest.config.ts", "playwright.config.ts", "postcss.config.mjs"]
 }

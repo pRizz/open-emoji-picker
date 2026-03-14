@@ -97,9 +97,14 @@ function App() {
               onCopy={({ entry }) => setLastCopiedLabel(`${entry.emoji} ${entry.name}`)}
             />
 
-            <aside class="flex flex-col gap-4 rounded-[2rem] border border-border/70 bg-panel/80 p-5 text-sm shadow-xl shadow-black/15 backdrop-blur">
+            <aside
+              aria-labelledby="picker-flow-heading"
+              class="flex flex-col gap-4 rounded-[2rem] border border-border/70 bg-panel/80 p-5 text-sm shadow-xl shadow-black/15 backdrop-blur"
+            >
               <div class="space-y-1">
-                <h2 class="text-lg font-semibold text-foreground">Designed for flow</h2>
+                <h2 id="picker-flow-heading" class="text-lg font-semibold text-foreground">
+                  Designed for flow
+                </h2>
                 <p class="text-muted-foreground">
                   Sticky search, sticky categories, fast ranking, and a smooth browsing rhythm.
                 </p>
