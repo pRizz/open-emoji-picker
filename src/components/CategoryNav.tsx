@@ -1,4 +1,5 @@
 import { For } from 'solid-js'
+import type { JSX } from 'solid-js'
 
 import { emojiCategories } from '@/lib/emoji-data'
 import { cn } from '@/lib/utils'
@@ -11,10 +12,36 @@ interface CategoryNavProps {
 }
 
 export function CategoryNav(props: CategoryNavProps) {
+  const handleWheel: JSX.EventHandlerUnion<HTMLElement, WheelEvent> = (event) => {
+    const nav = event.currentTarget
+
+    if (nav.scrollWidth <= nav.clientWidth) {
+      return
+    }
+
+    const scrollDelta =
+      Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
+
+    if (scrollDelta === 0) {
+      return
+    }
+
+    const maxScrollLeft = nav.scrollWidth - nav.clientWidth
+    const nextScrollLeft = Math.min(Math.max(nav.scrollLeft + scrollDelta, 0), maxScrollLeft)
+
+    if (nextScrollLeft === nav.scrollLeft) {
+      return
+    }
+
+    event.preventDefault()
+    nav.scrollLeft = nextScrollLeft
+  }
+
   return (
     <nav
       aria-label="Emoji categories"
-      class="overflow-x-auto px-2 py-2 scrollbar-none"
+      class="overflow-x-auto overflow-y-hidden px-2 py-2 scrollbar-none"
+      onWheel={handleWheel}
     >
       <ul class="flex min-w-max items-center gap-2">
         <For each={emojiCategories}>
